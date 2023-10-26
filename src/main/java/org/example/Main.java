@@ -31,12 +31,17 @@ public class Main {
 
         try {
             //creamos array donde almazenaremos las url de las imagenes de los perror
-            List<String> imagenesPerros=new ArrayList<>();
+            List<Perro> listaPerros=new ArrayList<>();
 
             //creamos bucle for que se repetira la cantidad de veçes que el usuario a pedido
             for(int i=0;i<respuestaCantidadPerros;i++){
-                JsonNode fotoPerro = objectMapper.readTree(new URL("https://dog.ceo/api/breeds/image/random"));//pasamos la ruta de la api
+                String URL="https://dog.ceo/api/breeds/image/random";
+
+                JsonNode fotoPerro = objectMapper.readTree(new URL(URL));//pasamos la ruta de la api
                String fotoPerroAnadirArray=objectMapper.readValue(fotoPerro.get("message").traverse(), new TypeReference<>(){});
+               String nombrePerro=averiguarRaza("URL");
+
+               //C
 
                imagenesPerros.add(fotoPerroAnadirArray);
             }
@@ -50,7 +55,16 @@ public class Main {
 
     }
 
+//metodo para sacar la raza de perro a partir de la url recibida por la API
+    private static String averiguarRaza(String imagenUrl){
+        //dividimos la URL por las barras
+        String[] partes=imagenUrl.split("/");
+        if(partes.length>=2){
+            //la penultima parte de la URL es la raza
+            return partes[partes.length-2];
+        }
 
+    }
 
 
 }
