@@ -9,6 +9,7 @@ import javax.xml.stream.Location;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,12 +30,27 @@ public class Main {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
         try {
-            JsonNode rootNode = objectMapper.readTree(new URL("https://dog.ceo/api/breeds/image/random"));//pasamos la ruta de la api
-            List<Location> locations = objectMapper.readValue(rootNode.get("results").traverse(), new TypeReference<>(){});
-            locations.forEach(System.out::println);
+            //creamos array donde almazenaremos las url de las imagenes de los perror
+            List<String> imagenesPerros=new ArrayList<>();
+
+            //creamos bucle for que se repetira la cantidad de veçes que el usuario a pedido
+            for(int i=0;i<respuestaCantidadPerros;i++){
+                JsonNode fotoPerro = objectMapper.readTree(new URL("https://dog.ceo/api/breeds/image/random"));//pasamos la ruta de la api
+               String fotoPerroAnadirArray=objectMapper.readValue(fotoPerro.get("message").traverse(), new TypeReference<>(){});
+
+               imagenesPerros.add(fotoPerroAnadirArray);
+            }
+
+            imagenesPerros.forEach(System.out::println);
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
+
+
+
+
 }
