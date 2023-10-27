@@ -38,15 +38,22 @@ public class Main {
                 String URL="https://dog.ceo/api/breeds/image/random";
 
                 JsonNode fotoPerro = objectMapper.readTree(new URL(URL));//pasamos la ruta de la api
+
                String fotoPerroAnadirArray=objectMapper.readValue(fotoPerro.get("message").traverse(), new TypeReference<>(){});
-               String nombrePerro=averiguarRaza("URL");
+               String raza=averiguarRaza(fotoPerroAnadirArray);
 
-               //C
+               //creamos el perro
+                Perro perro=new Perro(raza,fotoPerroAnadirArray);
 
-               imagenesPerros.add(fotoPerroAnadirArray);
+
+                //añadimos el perro al array
+                listaPerros.add(perro);
             }
 
-            imagenesPerros.forEach(System.out::println);
+            //mostramos
+            for (Perro perro:listaPerros){
+                System.out.println(perro);
+            }
 
 
         } catch (IOException e) {
@@ -57,13 +64,14 @@ public class Main {
 
 //metodo para sacar la raza de perro a partir de la url recibida por la API
     private static String averiguarRaza(String imagenUrl){
+       String resultado="";
         //dividimos la URL por las barras
         String[] partes=imagenUrl.split("/");
         if(partes.length>=2){
             //la penultima parte de la URL es la raza
-            return partes[partes.length-2];
+            resultado= partes[partes.length-2];
         }
-
+        return resultado;
     }
 
 
